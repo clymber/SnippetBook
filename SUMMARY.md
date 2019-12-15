@@ -11,3 +11,7 @@
   * [Markdown 图片](Markdown/markdown_picture.md)
   * [Markdown 表格](Markdown/markdown_table.md)
   * [Markdown 高级技巧](Markdown/markdown_advanced.md)
+* [Makefile](GNU-Make/gnu_make.md)
+  * [Example Makefile - Executable](GNU-Make/exe_makefile.md)
+  * [Example Makefile - Shared Library](GNU-Make/so_makefile.md)
+  * [Example Makefile - Static Library](GNU-Make/static_makefile.md)
