@@ -114,7 +114,7 @@ def wrap_param_demo():
     #printf(b"%f yuan for a bottle of beer\n", 20.5)
     
     # correct, wrap double type into c_double type:
-    # printf(b"%f yuan for a bottle of beer\n", ctypes.c_double(20.5))
+    printf(b"%f yuan for a bottle of beer\n", ctypes.c_double(20.5))
 
 if __name__ == "__main__":
     wrap_param_demo()
