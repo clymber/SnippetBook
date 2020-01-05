@@ -17,3 +17,4 @@
   * [Example Makefile - Static Library](GNU-Make/static_makefile.md)
 * [Python](Python/python.md)
   * [IP 范围类](Python/iprange.md)
+  * [python中调用so库函数](Python/python_so_demo.md)
