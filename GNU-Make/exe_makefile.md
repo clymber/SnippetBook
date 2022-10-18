@@ -11,6 +11,7 @@ TARGET := test
 
 # Custom Command
 CC := g++
+GCC:= gcc
 RM := rm -f
 
 # Custom Options and Flags
@@ -57,6 +58,6 @@ $(eval $(if $(filter $(MAKECMDGOALS),clean distclean),,include $(depends)))
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(TARGET_ARCH) $(OUTPUT_OPTION) -c $<
 
 %.o: %.c
-	$(CC) $(CPPFLAGS) $(TARGET_ARCH) -MM -MP -MT $@ -MF $(subst .o,.d,$@) $<
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(TARGET_ARCH) $(OUTPUT_OPTION) -c $<
+	$(GCC) $(CPPFLAGS) $(TARGET_ARCH) -MM -MP -MT $@ -MF $(subst .o,.d,$@) $<
+	$(GCC) $(CPPFLAGS) $(CFLAGS) $(TARGET_ARCH) $(OUTPUT_OPTION) -c $<
 ```
