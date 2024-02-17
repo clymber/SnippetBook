@@ -1,22 +1,24 @@
 ```Makefile
 # Makefile
-#    compile every C language source file in into an executable
+#    compile every C/C++ source file into an executable
 
 # Custom Command
-GCC:= gcc
-RM := rm -f
+CC  := g++
+GCC := gcc
+RM  := rm -f
 
 # Custom Options and Flags
 OUTPUT_OPTION = -o $@
 CFLAGS        += -Wall -DMACOS -D_DARWIN_C_SOURCE
 LDFLAGS       +=
+CXXFLAGS      += -std=c++20
 
 # Depended Library that Already Existed
 LDLIBS := # -lgmock
 
 # File lists
-sources := $(wildcard *.c)
-TARGET := $(subst .c,,${sources})
+sources := $(wildcard *.[c,cpp])
+TARGET  := $(subst .c,.app,$(subst .cpp,.app,${sources}))
 
 # Makefile targets
 .PHONY: all
@@ -26,8 +28,15 @@ all: $(TARGET)
 clean:
 	$(RM) $(TARGET)
 
+.PHONY: makedump
+makedump:
+	# sources: $(sources)
+	# TARGET: $(TARGET)
+
 # Makefile rules
-%: %.c
-	$(GCC) $(OUTPUT_OPTION) $(TARGET_ARCH) $^ $(LDFLAGS) $(LDLIBS) $(LOADLIBES)
+%.app: %.cpp
+	$(CC) $(OUTPUT_OPTION) $(TARGET_ARCH) $(CFLAGS) $(CXXFLAGS) $^ $(LDFLAGS) $(LDLIBS) $(LOADLIBES)
+%.app: %.c
+	$(GCC) $(OUTPUT_OPTION) $(TARGET_ARCH) $(CFLAGS) $^ $(LDFLAGS) $(LDLIBS) $(LOADLIBES)
 
 ```
