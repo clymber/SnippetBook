@@ -2,26 +2,23 @@
 下面是用于将C/C++代码编译成可执行程序的Makefile模板
 
 ```Makefile
-# Makefile
-#    A simple makefile for compiling c/c++ source file in the same directory
-#    into an executable
-
 # Make Target
 TARGET := test
 
 # Custom Command
-CC := g++
-GCC:= gcc
-RM := rm -f
+CC	:= gcc# C Complier Command
+CXX	:= c++# C++ Complier command
+RM	:= rm -f
 
 # Custom Options and Flags
-OUTPUT_OPTION = -o $@
-CFLAGS        += -ansi -Wall -DMACOS -D_DARWIN_C_SOURCE
-CPPFLAGS      +=
-LDFLAGS       +=
+OUTPUT = -o $@
+CFLAGS	+= -Wall # C compiler flags
+CXXFLAGS += $(CFLAGS) # C++ compiler flags
+CPPFLAGS += -I /usr/local/include # C/C++ preprocessor flags
+LDFLAGS += -L /usr/local/lib # Linker flags
 
 # Depended Library that Already Existed
-LDLIBS := -lgmock
+LDLIBS := -lgmock -lgtest -lpthread
 
 # File lists
 sources := $(wildcard *.c *.cpp)
@@ -33,7 +30,7 @@ depends = $(wildcard $(subst .o,.d,$(objects)))
 all: $(TARGET)
 
 $(TARGET): $(objects)
-	$(CC) $(OUTPUT_OPTION) $(TARGET_ARCH) $^ $(LDFLAGS) $(LDLIBS) $(LOADLIBES)
+	$(CXX) $(LDFLAGS) $(LOADLIBES) $^ $(LDLIBS) $(OUTPUT)
 
 .PHONY: clean
 clean:
@@ -45,8 +42,8 @@ distclean: clean
 
 make_debug:
 	# TARGET : $(TARGET)
-	# CC: $(CC)
-	# OUTPUT_OPTION: $(OUTPUT_OPTION)
+	# CXX: $(CXX)
+	# OUTPUT: $(OUTPUT)
 	# LDFLAGS: $(LDFLAGS)
 	# LDLIBS: $(LDLIBS)
 
@@ -54,10 +51,10 @@ $(eval $(if $(filter $(MAKECMDGOALS),clean distclean),,include $(depends)))
 
 # Makefile rules
 %.o: %.cpp
-	$(CC) $(CPPFLAGS) $(TARGET_ARCH) -MM -MP -MT $@ -MF $(subst .o,.d,$@) $<
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(TARGET_ARCH) $(OUTPUT_OPTION) -c $<
+	$(CXX) $(CPPFLAGS) -MM -MP -MT $@ -MF $(subst .o,.d,$@) $<
+	$(CXX) $(CPPFLAGS) $(CFLAGS) -c $< $(OUTPUT)
 
 %.o: %.c
-	$(GCC) $(CPPFLAGS) $(TARGET_ARCH) -MM -MP -MT $@ -MF $(subst .o,.d,$@) $<
-	$(GCC) $(CPPFLAGS) $(CFLAGS) $(TARGET_ARCH) $(OUTPUT_OPTION) -c $<
+	$(CC) $(CPPFLAGS) -MM -MP -MT $@ -MF $(subst .o,.d,$@) $<
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< $(OUTPUT)
 ```
