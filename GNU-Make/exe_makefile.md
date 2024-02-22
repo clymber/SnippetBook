@@ -11,7 +11,6 @@ CXX	:= c++# C++ Complier command
 RM	:= rm -f
 
 # Custom Options and Flags
-OUTPUT = -o $@
 CFLAGS	+= -Wall# C compiler flags
 CXXFLAGS += $(CFLAGS) -std=c++17# C++ compiler flags
 CPPFLAGS += -I /usr/local/include# C/C++ preprocessor flags
@@ -26,35 +25,36 @@ objects := $(subst .c,.o,$(subst .cpp,.o,$(sources)))
 depends = $(wildcard $(subst .o,.d,$(objects)))
 
 # Makefile targets
-.PHONY: all
+.PHONY: all clean distclean make_debug
 all: $(TARGET)
 
-$(TARGET): $(objects)
-	$(CXX) $(LDFLAGS) $(LOADLIBES) $^ $(LDLIBS) $(OUTPUT)
-
-.PHONY: clean
 clean:
-	$(RM) $(objects) $(depends)
+	$(if $(wildcard $(objects))$(depends),$(RM) $(objects) $(depends),)
 
-.PHONY: distclean
 distclean: clean
-	$(RM) $(TARGET)
+	$(if $(wildcard $(TARGET)),$(RM) $(TARGET),)
 
 make_debug:
-	# TARGET : $(TARGET)
-	# CXX: $(CXX)
-	# OUTPUT: $(OUTPUT)
-	# LDFLAGS: $(LDFLAGS)
-	# LDLIBS: $(LDLIBS)
+	# Building targets  # TARGET: $(TARGET)
+	# C complier        # CC: $(CC)
+	# C compiler flags  # CFLAGS: $(CFLAGS)
+	# C++ compiler      # CXX: $(CXX)
+	# C++ compiler flags# CXXFLAGS: $(CXXFLAGS)
+	# Linker options    # LDFLAGS: $(LDFLAGS)
+	# Linking libraries # LDLIBS: $(LDLIBS)
 
+# Include dependencies
 $(eval $(if $(filter $(MAKECMDGOALS),clean distclean),,include $(depends)))
 
 # Makefile rules
+$(TARGET): $(objects)
+	$(CXX) $^ $(LDFLAGS) $(LDLIBS) -o $@
+
 %.o: %.cpp
-	$(CXX) $(CPPFLAGS) -MM -MP -MT $@ $< -MF $(subst .o,.d,$@)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< $(OUTPUT)
+	$(CXX) $< $(CPPFLAGS) -MM -MP -MT $@ -MF $(subst .o,.d,$@)
+	$(CXX) $< $(CPPFLAGS) $(CXXFLAGS) -c -o $@
 
 %.o: %.c
-	$(CC) $(CPPFLAGS) -MM -MP -MT $@ $< -MF $(subst .o,.d,$@)
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< $(OUTPUT)
+	$(CC) $< $(CPPFLAGS) -MM -MP -MT $@ -MF $(subst .o,.d,$@)
+	$(CC) $< $(CPPFLAGS) $(CFLAGS) -c -o $@
 ```
