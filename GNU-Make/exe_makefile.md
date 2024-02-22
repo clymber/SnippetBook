@@ -12,10 +12,10 @@ RM	:= rm -f
 
 # Custom Options and Flags
 OUTPUT = -o $@
-CFLAGS	+= -Wall # C compiler flags
-CXXFLAGS += $(CFLAGS) # C++ compiler flags
-CPPFLAGS += -I /usr/local/include # C/C++ preprocessor flags
-LDFLAGS += -L /usr/local/lib # Linker flags
+CFLAGS	+= -Wall# C compiler flags
+CXXFLAGS += $(CFLAGS) -std=c++17# C++ compiler flags
+CPPFLAGS += -I /usr/local/include# C/C++ preprocessor flags
+LDFLAGS += -L /usr/local/lib# Linker flags
 
 # Depended Library that Already Existed
 LDLIBS := -lgmock -lgtest -lpthread
@@ -51,10 +51,10 @@ $(eval $(if $(filter $(MAKECMDGOALS),clean distclean),,include $(depends)))
 
 # Makefile rules
 %.o: %.cpp
-	$(CXX) $(CPPFLAGS) -MM -MP -MT $@ -MF $(subst .o,.d,$@) $<
-	$(CXX) $(CPPFLAGS) $(CFLAGS) -c $< $(OUTPUT)
+	$(CXX) $(CPPFLAGS) -MM -MP -MT $@ $< -MF $(subst .o,.d,$@)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< $(OUTPUT)
 
 %.o: %.c
-	$(CC) $(CPPFLAGS) -MM -MP -MT $@ -MF $(subst .o,.d,$@) $<
+	$(CC) $(CPPFLAGS) -MM -MP -MT $@ $< -MF $(subst .o,.d,$@)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< $(OUTPUT)
 ```
